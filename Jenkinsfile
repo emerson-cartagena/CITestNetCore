@@ -4,11 +4,10 @@ node {
   }
   stage('SonarQube Analysis') {
     def scannerHome = tool 'SonarScanner for MSBuild'
-    withSonarQubeEnv(installationName: 'sq1') {
-      sh "dotnet-sonarscanner begin /k:\"CITestNetCore\""
-      sh "dotnet restore ./CITestNetCore.sln"
+    withSonarQubeEnv() {
+      sh "dotnet ${scannerHome}/SonarScanner.MSBuild.dll begin /k:\"CITestNetCore\""
       sh "dotnet build"
-      sh "dotnet-sonarscanner end"
+      sh "dotnet ${scannerHome}/SonarScanner.MSBuild.dll end"
     }
   }
 }
